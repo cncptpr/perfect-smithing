@@ -1,0 +1,78 @@
+[package]
+name = "shortest-sum"
+version = "0.1.0"
+edition = "2024"
+default-run = "shortest-sum"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "shortest-sum"
+path = "src/main.rs"
+required-features = ["cli"]
+
+[[bin]]
+name = "shortest-sum-web"
+path = "src/server.rs"
+required-features = ["ssr"]
+
+[features]
+default = ["cli"]
+cli = ["dep:clap"]
+ssr = [
+    "dep:axum",
+    "dep:tokio",
+    "dep:leptos",
+    "dep:leptos_axum",
+    "dep:leptos_meta",
+    "leptos/ssr",
+    "leptos_meta/ssr",
+]
+hydrate = [
+    "dep:leptos",
+    "dep:leptos_meta",
+    "dep:console_error_panic_hook",
+    "dep:wasm-bindgen",
+    "dep:web-sys",
+    "leptos/hydrate",
+]
+
+[dependencies]
+clap = { version = "4.6.6", features = ["derive"], optional = true }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+leptos = { version = "0.8", optional = true }
+leptos_meta = { version = "0.8", optional = true }
+leptos_axum = { version = "0.8", optional = true }
+axum = { version = "0.8", optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "net", "macros"], optional = true }
+console_error_panic_hook = { version = "0.1", optional = true }
+# MUST match nixpkgs wasm-bindgen-cli (0.2.127); wasm-bindgen errors on patch mismatch.
+wasm-bindgen = { version = "=0.2.127", optional = true }
+web-sys = { version = "0.3", features = ["Window", "Location", "History"], optional = true }
+
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[package.metadata.leptos]
+output-name = "shortest_sum"
+# The package has two bins, so cargo-leptos needs to be told which one to build.
+bin-target = "shortest-sum-web"
+# The exe file defaults to the package name, which is the CLI bin here.
+bin-exe-name = "shortest-sum-web"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+style-file = "style/main.css"
+assets-dir = "public"
+site-addr = "127.0.0.1:3030"
+reload-port = 3031
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false
+lib-profile-release = "wasm-release"

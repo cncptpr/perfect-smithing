@@ -1,0 +1,392 @@
+/* Minecraft themed UI for the smithing minigame. */
+
+@font-face {
+  font-family: "Monocraft";
+  src: url("/Monocraft.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  /* Panels and buttons: dark gray with light/dark 3D bevels. */
+  --panel-bg: #3b3b3b;
+  --panel-light: #5c5c5c;
+  --panel-dark: #1d1d1d;
+  --btn-bg: #6a6a6a;
+  --btn-bg-hover: #7d7d7d;
+  --btn-bg-active: #5e5e5e;
+  --btn-light: #9a9a9a;
+  --btn-dark: #2a2a2a;
+  --page-bg: #232323;
+  --text: #e0e0e0;
+  --text-dim: #9d9d97;
+
+  /* Hit colours, chosen by the owner: blues and purple for the negatives,
+     green/yellow/orange/red for the positives. */
+  --hit-n3: #74c7ee; /* light blue */
+  --hit-n6: #3665d8; /* blue */
+  --hit-n5: #2a3fa0; /* dark blue */
+  --hit-n15: #a455d6; /* purple */
+  --hit-2: #5fc93a; /* green */
+  --hit-13: #f2851d; /* orange */
+  --hit-7: #fed83d; /* yellow */
+  --hit-16: #d8402f; /* red */
+
+  /* Marker colours, reserved for the two markers, their numbers and the
+     inputs that set them. */
+  --marker-target: #ff3030;
+  --marker-start: #30ff30;
+
+  /* Error messages, unrelated to any hit colour. */
+  --error: #ff4d4d;
+}
+
+html {
+  font-family: "Monocraft", monospace;
+  background: var(--page-bg);
+  color: var(--text);
+}
+
+body {
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* The Minecraft look has no rounded corners anywhere. */
+button {
+  border-radius: 0;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  text-align: center;
+  color: var(--text);
+  text-shadow: 2px 2px 0 var(--panel-dark);
+}
+
+/* A dark gray panel with light top/left and dark bottom/right edges. */
+.slots,
+.hit-buttons,
+.marker-inputs,
+.solution {
+  background: var(--panel-bg);
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--panel-light) var(--panel-dark) var(--panel-dark) var(--panel-light);
+  padding: 8px;
+}
+
+/* ---------------------------------------------------------------- slots */
+
+.slots {
+  display: flex;
+  gap: 8px;
+}
+
+.slot {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--btn-bg);
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--btn-light) var(--btn-dark) var(--btn-dark) var(--btn-light);
+  cursor: pointer;
+}
+
+.slot:hover {
+  background: var(--btn-bg-hover);
+}
+
+.slot:active {
+  background: var(--btn-bg-active);
+  border-color: var(--btn-dark) var(--btn-light) var(--btn-light) var(--btn-dark);
+}
+
+/* The Minecraft hotbar style selection frame. */
+.slot.selected {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
+}
+
+.slot-label {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.slot-empty {
+  color: var(--text-dim);
+}
+
+/* ------------------------------------------------------------- buttons */
+
+/* A horizontally centered four column grid: two rows of hits, the empty
+   button on a row of its own below. */
+.hit-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 72px);
+  justify-content: center;
+  gap: 8px;
+}
+
+.hit-btn {
+  width: 100%;
+  padding: 8px;
+  font: inherit;
+  font-size: 16px;
+  background: var(--btn-bg);
+  color: var(--text);
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--btn-light) var(--btn-dark) var(--btn-dark) var(--btn-light);
+  cursor: pointer;
+}
+
+.hit-btn:hover {
+  background: var(--btn-bg-hover);
+}
+
+.hit-btn:active {
+  background: var(--btn-bg-active);
+  border-color: var(--btn-dark) var(--btn-light) var(--btn-light) var(--btn-dark);
+}
+
+/* The bottom row: one free cell, the empty button over two cells and the
+   clear button in the fourth. Both are pinned to row three so the eight hit
+   buttons keep auto-filling the first two rows above them. */
+.empty-btn {
+  grid-column: 2 / 4;
+  grid-row: 3;
+  color: var(--text-dim);
+}
+
+.clear-btn {
+  grid-column: 4;
+  grid-row: 3;
+  color: var(--text-dim);
+}
+
+/* -------------------------------------------------------- hit colours */
+
+.hit-n15 {
+  color: var(--hit-n15);
+}
+.hit-n6 {
+  color: var(--hit-n6);
+}
+.hit-n5 {
+  color: var(--hit-n5);
+}
+.hit-n3 {
+  color: var(--hit-n3);
+}
+.hit-2 {
+  color: var(--hit-2);
+}
+.hit-7 {
+  color: var(--hit-7);
+}
+.hit-13 {
+  color: var(--hit-13);
+}
+.hit-16 {
+  color: var(--hit-16);
+}
+.hit-unknown {
+  color: var(--text);
+}
+
+/* ------------------------------------------------------- marker inputs */
+
+/* Exact marker positions for when tapping a cell on the bar is
+   impractical: one field per marker, in its marker's colour. */
+.marker-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.marker-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.marker-input-target {
+  color: var(--marker-target);
+}
+
+.marker-input-start {
+  color: var(--marker-start);
+}
+
+.marker-input input {
+  width: 72px;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--panel-dark);
+  /* A sunken field: dark on the top/left, light on the bottom/right. */
+  border: 2px solid;
+  border-color: var(--panel-dark) var(--panel-light) var(--panel-light) var(--panel-dark);
+}
+
+/* The same white frame the selected slot wears. */
+.marker-input input:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
+}
+
+/* ----------------------------------------------------------- gauge block
+   The number line, the bar, the marker numbers and the arrows form one
+   unit and sit close together. */
+
+.gauge {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ------------------------------------------------------------ numbers */
+
+/* The number line above the bar sits straight on the page. */
+.numbers {
+  position: relative;
+  height: 20px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.number {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+}
+
+/* ----------------------------------------------------------------- bar */
+
+.bar {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 24px;
+}
+
+.cell {
+  flex: 1 1 0;
+  height: 14px;
+  pointer-events: none;
+  background: var(--btn-bg);
+}
+
+.cell-fifth {
+  background: var(--btn-bg-hover);
+}
+
+.cell-tick {
+  height: 24px;
+  background: var(--btn-light);
+}
+
+/* The red target and green player markers; pointer transparent so events
+   always reach the bar container underneath. */
+.marker {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px #000000;
+}
+
+.marker-target {
+  background: var(--marker-target);
+}
+
+.marker-start {
+  background: var(--marker-start);
+}
+
+/* ------------------------------------------------------- marker numbers */
+
+/* One line normally, two when the markers are too close to share it. */
+.marker-values {
+  position: relative;
+  height: 16px;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.marker-values.stacked {
+  height: 32px;
+}
+
+.marker-value {
+  position: absolute;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.marker-value-target {
+  top: 0;
+  color: var(--marker-target);
+}
+
+.marker-value-start {
+  color: var(--marker-start);
+}
+
+/* --------------------------------------------------------------- arrows */
+
+.arrows {
+  display: block;
+  width: 100%;
+}
+
+/* ------------------------------------------------------------ solution */
+
+.solution {
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.solution-sep {
+  color: var(--text-dim);
+}
+
+.no-hits {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.solution-error {
+  color: var(--error);
+  font-weight: bold;
+}
