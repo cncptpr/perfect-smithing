@@ -1,4 +1,4 @@
-# Agent notes — shortest-sum
+# Agent notes — perfect-smithing
 
 Working agreements from the project owner. They override agent defaults:
 
@@ -6,6 +6,6 @@ Working agreements from the project owner. They override agent defaults:
    OK.** Leave changes uncommitted and servers/processes running until told
    otherwise — even when verification passed.
 2. **Browser checks use `$ agent-browser`**, never the desktop/browser-pane
-   tool (it is usually not connected). See `shortest-sum-web.md` Phase 8.
+   tool (it is usually not connected). See `perfect-smithing-web.md` Phase 8.
 
 Append future agreements here.

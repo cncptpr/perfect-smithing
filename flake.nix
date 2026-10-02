@@ -1,5 +1,5 @@
 {
-  description = "shortest-sum — CLI + Leptos web interface";
+  description = "perfect-smithing — CLI + Leptos web interface";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -24,7 +24,7 @@
         pkgs:
         let
           pkg = pkgs.rustPlatform.buildRustPackage {
-            pname = "shortest-sum";
+            pname = "perfect-smithing";
             version = "0.1.0";
             src = self;
 
@@ -45,30 +45,30 @@
             buildPhase = ''
               runHook preBuild
               cargo leptos build --release
-              cargo build --release --offline --bin shortest-sum
+              cargo build --release --offline --bin perfect-smithing
               runHook postBuild
             '';
 
             installPhase = ''
               runHook preInstall
-              mkdir -p $out/bin $out/share/shortest-sum
-              cp target/release/shortest-sum target/release/shortest-sum-web $out/bin/
-              cp -r target/site $out/share/shortest-sum/site
-              wrapProgram $out/bin/shortest-sum-web \
-                --set LEPTOS_SITE_ROOT $out/share/shortest-sum/site
+              mkdir -p $out/bin $out/share/perfect-smithing
+              cp target/release/perfect-smithing target/release/perfect-smithing-web $out/bin/
+              cp -r target/site $out/share/perfect-smithing/site
+              wrapProgram $out/bin/perfect-smithing-web \
+                --set LEPTOS_SITE_ROOT $out/share/perfect-smithing/site
               runHook postInstall
             '';
 
             meta = {
               description = "Shortest path solver on a bounded number line, with a Minecraft-style web UI";
-              mainProgram = "shortest-sum-web";
+              mainProgram = "perfect-smithing-web";
               platforms = pkgs.lib.platforms.unix;
             };
           };
         in
         {
           default = pkg;
-          shortest-sum = pkg;
+          perfect-smithing = pkg;
         }
       );
 
@@ -81,28 +81,28 @@
             ...
           }:
           let
-            cfg = config.services.shortest-sum;
+            cfg = config.services.perfect-smithing;
           in
           {
-            options.services.shortest-sum = {
-              enable = lib.mkEnableOption "the shortest-sum web service";
+            options.services.perfect-smithing = {
+              enable = lib.mkEnableOption "the perfect-smithing web service";
 
               package = lib.mkOption {
                 type = lib.types.package;
                 default = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
                 defaultText = lib.literalExpression "self.packages.\${pkgs.stdenv.hostPlatform.system}.default";
-                description = "The shortest-sum package to run.";
+                description = "The perfect-smithing package to run.";
               };
 
               user = lib.mkOption {
                 type = lib.types.str;
-                default = "shortest-sum";
+                default = "perfect-smithing";
                 description = "User account under which the service runs.";
               };
 
               group = lib.mkOption {
                 type = lib.types.str;
-                default = "shortest-sum";
+                default = "perfect-smithing";
                 description = "Group owning the files of the service.";
               };
 
@@ -135,19 +135,19 @@
               users.users.${cfg.user} = {
                 isSystemUser = true;
                 group = cfg.group;
-                description = "shortest-sum service user";
+                description = "perfect-smithing service user";
               };
               users.groups.${cfg.group} = { };
 
-              systemd.services.shortest-sum = {
-                description = "shortest-sum web service";
+              systemd.services.perfect-smithing = {
+                description = "perfect-smithing web service";
                 wantedBy = [ "multi-user.target" ];
                 after = [ "network.target" ];
 
                 serviceConfig = {
                   User = cfg.user;
                   Group = cfg.group;
-                  ExecStart = "${cfg.package}/bin/shortest-sum-web";
+                  ExecStart = "${cfg.package}/bin/perfect-smithing-web";
                   Restart = "on-failure";
                 };
 
@@ -161,7 +161,7 @@
               networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
             };
           };
-        shortest-sum = default;
+        perfect-smithing = default;
       };
     };
 }

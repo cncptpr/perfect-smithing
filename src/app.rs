@@ -42,7 +42,7 @@ pub fn App() -> impl IntoView {
 
     view! {
         // id=leptos lets cargo-leptos hot-reload this stylesheet
-        <Stylesheet id="leptos" href="/pkg/shortest_sum.css"/>
+        <Stylesheet id="leptos" href="/pkg/perfect_smithing.css"/>
         <Title text="Perfect Smithing"/>
         <main>
             <h1>"Perfect Smithing"</h1>

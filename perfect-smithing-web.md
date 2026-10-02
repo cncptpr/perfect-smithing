@@ -1,6 +1,6 @@
-# shortest-sum — Web interface implementation plan
+# perfect-smithing — Web interface implementation plan
 
-Executes `WEB_PLAN.md` (repo: `~/Projects/work-playground/shortest-sum`). This document is
+Executes `WEB_PLAN.md` (repo: `~/Projects/work-playground/perfect-smithing`). This document is
 self-contained: every decision is already made. If anything here contradicts `WEB_PLAN.md`,
 `WEB_PLAN.md` wins.
 
@@ -17,7 +17,7 @@ Settled interpretations (from the author):
 
 ## Key decisions
 
-- **One Cargo package** (no workspace, no extra crates): `shortest-sum` = lib + 2 bins.
+- **One Cargo package** (no workspace, no extra crates): `perfect-smithing` = lib + 2 bins.
 - **Leptos 0.8** + **cargo-leptos** (nixpkgs), all solving on the client (wasm). The axum
   server only serves the static site + SSR shell. No `leptos_router` — URL sync is a small
   pure module + History API.
@@ -31,7 +31,7 @@ Settled interpretations (from the author):
 ## Package layout
 
 ```
-shortest-sum/
+perfect-smithing/
 ├── Cargo.toml            # lib + 2 bins + features + [package.metadata.leptos]
 ├── src/
 │   ├── lib.rs            # module declarations; #[cfg(feature="hydrate")] pub fn hydrate()
@@ -62,7 +62,7 @@ Cargo.toml shape (versions confirmed available):
 
 ```toml
 [package]
-name = "shortest-sum"
+name = "perfect-smithing"
 version = "0.1.0"
 edition = "2024"
 
@@ -70,12 +70,12 @@ edition = "2024"
 crate-type = ["cdylib", "rlib"]
 
 [[bin]]
-name = "shortest-sum"
+name = "perfect-smithing"
 path = "src/main.rs"
 required-features = ["cli"]
 
 [[bin]]
-name = "shortest-sum-web"
+name = "perfect-smithing-web"
 path = "src/server.rs"
 required-features = ["ssr"]
 
@@ -108,8 +108,8 @@ codegen-units = 1
 panic = "abort"
 
 [package.metadata.leptos]
-output-name = "shortest_sum"
-bin-target = "shortest-sum-web"      # package has 2 bins -> required
+output-name = "perfect_smithing"
+bin-target = "perfect-smithing-web"      # package has 2 bins -> required
 site-root = "target/site"
 site-pkg-dir = "pkg"
 style-file = "style/main.css"
@@ -317,8 +317,8 @@ Run `devenv up` (process `web` = `cargo leptos watch`) and check in the browser 
 ## Phase 9 — flake.nix (package + NixOS module)
 
 Inputs: `nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"` (lock pins it). Outputs:
-`packages.<sys>.default`, `packages.<sys>.shortest-sum` (same derivation), `nixosModules.default`
-(+ named alias `nixosModules.shortest-sum`).
+`packages.<sys>.default`, `packages.<sys>.perfect-smithing` (same derivation), `nixosModules.default`
+(+ named alias `nixosModules.perfect-smithing`).
 
 Package via `rustPlatform.buildRustPackage`:
 
@@ -328,15 +328,15 @@ nativeBuildInputs = [ cargo-leptos wasm-bindgen-cli binaryen makeWrapper ];
 buildPhase = ''
   runHook preBuild
   cargo leptos build --release
-  cargo build --release --offline --bin shortest-sum
+  cargo build --release --offline --bin perfect-smithing
   runHook postBuild
 '';
 installPhase = ''
   runHook preInstall
-  mkdir -p $out/bin $out/share/shortest-sum
-  cp target/release/shortest-sum target/release/shortest-sum-web $out/bin/
-  cp -r target/site $out/share/shortest-sum/site
-  wrapProgram $out/bin/shortest-sum-web --set LEPTOS_SITE_ROOT $out/share/shortest-sum/site
+  mkdir -p $out/bin $out/share/perfect-smithing
+  cp target/release/perfect-smithing target/release/perfect-smithing-web $out/bin/
+  cp -r target/site $out/share/perfect-smithing/site
+  wrapProgram $out/bin/perfect-smithing-web --set LEPTOS_SITE_ROOT $out/share/perfect-smithing/site
   runHook postInstall
 '';
 # default checkPhase (cargo test --offline) stays on
@@ -347,16 +347,16 @@ uses the PATH tools we provide; `leptos_config::get_configuration(None)` reads
 `LEPTOS_SITE_ROOT`/`LEPTOS_SITE_ADDR` at **runtime**, so the wrap + module env work.)
 
 NixOS module options: `enable`, `package` (default `self.packages.${pkgs.system}.default`),
-`user`, `group` (defaults `shortest-sum`; module creates the system user/group),
+`user`, `group` (defaults `perfect-smithing`; module creates the system user/group),
 `address` (default `127.0.0.1`), `port` (default 3000), `openFirewall` (default false),
 `extraEnvironment` (attrsOf str). Service: `wantedBy = [ "multi-user.target" ]`,
-`serviceConfig = { User, Group, ExecStart = "${package}/bin/shortest-sum-web",
+`serviceConfig = { User, Group, ExecStart = "${package}/bin/perfect-smithing-web",
 Restart = "on-failure" }`, `environment = { LEPTOS_SITE_ADDR = "${address}:${port}";
 LEPTOS_ENV = "PROD"; } // extraEnvironment`.
 
 **Verify:**
 
-- `nix build .#` → `$out/bin/shortest-sum` + `$out/bin/shortest-sum-web` + share/site exist;
+- `nix build .#` → `$out/bin/perfect-smithing` + `$out/bin/perfect-smithing-web` + share/site exist;
   smoke-test: run the wrapped server on a port, `curl` it, kill it.
 - Module: evaluate through a throwaway `nixpkgs.lib.nixosSystem` (module + one service
   enablement) via `nix eval --expr` to confirm options/service config; confirm

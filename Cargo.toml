@@ -1,19 +1,19 @@
 [package]
-name = "shortest-sum"
+name = "perfect-smithing"
 version = "0.1.0"
 edition = "2024"
-default-run = "shortest-sum"
+default-run = "perfect-smithing"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [[bin]]
-name = "shortest-sum"
+name = "perfect-smithing"
 path = "src/main.rs"
 required-features = ["cli"]
 
 [[bin]]
-name = "shortest-sum-web"
+name = "perfect-smithing-web"
 path = "src/server.rs"
 required-features = ["ssr"]
 
@@ -60,11 +60,11 @@ codegen-units = 1
 panic = "abort"
 
 [package.metadata.leptos]
-output-name = "shortest_sum"
+output-name = "perfect_smithing"
 # The package has two bins, so cargo-leptos needs to be told which one to build.
-bin-target = "shortest-sum-web"
+bin-target = "perfect-smithing-web"
 # The exe file defaults to the package name, which is the CLI bin here.
-bin-exe-name = "shortest-sum-web"
+bin-exe-name = "perfect-smithing-web"
 site-root = "target/site"
 site-pkg-dir = "pkg"
 style-file = "style/main.css"

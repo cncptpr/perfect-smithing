@@ -1376,6 +1376,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220"
 
 [[package]]
+name = "perfect-smithing"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "clap",
+ "console_error_panic_hook",
+ "leptos",
+ "leptos_axum",
+ "leptos_meta",
+ "serde",
+ "serde_json",
+ "tokio",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "pin-project"
 version = "1.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1880,23 +1897,6 @@ dependencies = [
  "cfg-if",
  "cpufeatures",
  "digest",
-]
-
-[[package]]
-name = "shortest-sum"
-version = "0.1.0"
-dependencies = [
- "axum",
- "clap",
- "console_error_panic_hook",
- "leptos",
- "leptos_axum",
- "leptos_meta",
- "serde",
- "serde_json",
- "tokio",
- "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]

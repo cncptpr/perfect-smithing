@@ -2,7 +2,7 @@ use axum::Router;
 use leptos::logging::log;
 use leptos::prelude::*;
 use leptos_axum::{LeptosRoutes, generate_route_list};
-use shortest_sum::app::*;
+use perfect_smithing::app::*;
 
 #[tokio::main]
 async fn main() {

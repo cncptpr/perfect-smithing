@@ -2,7 +2,7 @@ use std::io;
 
 use clap::Parser;
 
-use shortest_sum::{
+use perfect_smithing::{
     CoreError, DEFAULT_MAX_POS, DEFAULT_STEPS, LastHits, Slot, floyd_warshall, load_cache, solve,
     store_cache,
 };
@@ -175,7 +175,7 @@ fn main() -> io::Result<()> {
 //         writer,
 //         "
 // Usage:
-//     shortest-sum to <target> [from <start>] [in <max_pos>] [with <step> [<step> ...]]
+//     perfect-smithing to <target> [from <start>] [in <max_pos>] [with <step> [<step> ...]]
 
 // Output:
 //     The least amount of <step>s to get from the <start> position to the <target> position
