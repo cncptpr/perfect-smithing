@@ -67,7 +67,7 @@ mod tests {
 
     #[test]
     fn markers_apart_share_a_line() {
-        assert!(!needs_stack(state_at(0, 180)));
+        assert!(!needs_stack(state_at(0, 150)));
         assert!(!needs_stack(state_at(60, 72)));
         assert!(!needs_stack(state_at(72, 60)));
     }
@@ -80,9 +80,9 @@ mod tests {
 
     #[test]
     fn numbers_sit_on_their_cell_center() {
-        // Cell 90 is the exact center of the bar.
-        assert_eq!(value_style(90, false), "left:50%;top:0");
-        assert_eq!(value_style(90, true), "left:50%;top:50%");
+        // Cell 75 is the exact center of the bar.
+        assert_eq!(value_style(75, false), "left:50%;top:0");
+        assert_eq!(value_style(75, true), "left:50%;top:50%");
         assert_eq!(
             value_style(0, false),
             format!("left:{}%;top:0", cell_center(0))

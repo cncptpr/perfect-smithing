@@ -4,7 +4,7 @@ use crate::solve::DEFAULT_MAX_POS;
 
 use super::cell_center;
 
-/// The number line above the bar: `0, 20, …, 180`, every number sitting on
+/// The number line above the bar: `0, 20, …, 140`, every number sitting on
 /// the center of its cell.
 #[component]
 pub fn Numbers() -> impl IntoView {

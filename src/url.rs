@@ -133,7 +133,7 @@ mod tests {
             state,
             State {
                 start: 7,                         // "start=abc" is not a number
-                target: 180,                      // clamped to the bar
+                target: 150,                      // clamped to the bar
                 slots: [None, Some(-6), Some(2)], // 17 is not one of the hits
                 selected: 2,                      // clamped to the third slot
             }

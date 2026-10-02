@@ -5,10 +5,10 @@ use crate::state::State;
 
 use super::cell_center;
 
-/// The bar: 181 bottom-aligned cells with the red target and the green
+/// The bar: 151 bottom-aligned cells with the red target and the green
 /// player marker on top. Cells and markers ignore the pointer, so events
 /// always land on the bar container and its width maps the mouse position
-/// onto a cell: `pos = clamp(floor(offset / width * 181), 0, 180)`.
+/// onto a cell: `pos = clamp(floor(offset / width * 151), 0, 150)`.
 /// Left-clicking moves the target, right-clicking the player marker.
 #[component]
 pub fn Bar(state: RwSignal<State>) -> impl IntoView {
@@ -62,7 +62,7 @@ fn bar_width(bar: NodeRef<html::Div>) -> Option<i32> {
 }
 
 /// Maps a mouse offset inside the bar to the cell it covers:
-/// `clamp(floor(offset / width * 181), 0, 180)`.
+/// `clamp(floor(offset / width * 151), 0, 150)`.
 pub(crate) fn cell_from_offset(offset: i32, width: i32) -> i64 {
     let cell = f64::from(offset) / f64::from(width) * (DEFAULT_MAX_POS + 1) as f64;
     (cell.floor() as i64).clamp(0, DEFAULT_MAX_POS)
@@ -81,27 +81,27 @@ mod tests {
     #[test]
     fn offsets_map_onto_cells() {
         // A bar one pixel per cell wide: every pixel is its own cell.
-        assert_eq!(cell_from_offset(0, 181), 0);
-        assert_eq!(cell_from_offset(1, 181), 1);
-        assert_eq!(cell_from_offset(90, 181), 90);
-        assert_eq!(cell_from_offset(180, 181), 180);
+        assert_eq!(cell_from_offset(0, 151), 0);
+        assert_eq!(cell_from_offset(1, 151), 1);
+        assert_eq!(cell_from_offset(90, 151), 90);
+        assert_eq!(cell_from_offset(150, 151), 150);
 
         // Fractional cells floor down.
-        assert_eq!(cell_from_offset(1, 3), 60);
+        assert_eq!(cell_from_offset(1, 3), 50);
     }
 
     #[test]
     fn offsets_stay_on_the_bar() {
-        assert_eq!(cell_from_offset(0, 1810), 0);
-        assert_eq!(cell_from_offset(-40, 1810), 0);
-        assert_eq!(cell_from_offset(1810, 1810), 180);
-        assert_eq!(cell_from_offset(4000, 1810), 180);
+        assert_eq!(cell_from_offset(0, 1510), 0);
+        assert_eq!(cell_from_offset(-40, 1510), 0);
+        assert_eq!(cell_from_offset(1510, 1510), 150);
+        assert_eq!(cell_from_offset(4000, 1510), 150);
     }
 
     #[test]
     fn markers_sit_on_the_center_of_their_cell() {
         // Everything but the position comes from the theme.
-        assert_eq!(marker_style(90), "left:50%");
+        assert_eq!(marker_style(75), "left:50%");
         assert_eq!(marker_style(0), format!("left:{}%", cell_center(0)));
     }
 }

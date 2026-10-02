@@ -25,7 +25,7 @@ pub use solution::SolutionLine;
 use crate::solve::DEFAULT_MAX_POS;
 
 /// The percentage at which the center of `position`'s cell sits on the bar:
-/// `(position + 0.5) / 181 * 100`. Numbers, markers and arrows all line up
+/// `(position + 0.5) / 151 * 100`. Numbers, markers and arrows all line up
 /// on this one formula.
 pub(crate) fn cell_center(position: i64) -> f64 {
     (position as f64 + 0.5) / (DEFAULT_MAX_POS + 1) as f64 * 100.0
@@ -37,9 +37,9 @@ mod tests {
 
     #[test]
     fn cell_centers_stay_inside_the_bar() {
-        assert_eq!(cell_center(0), 0.5 / 181.0 * 100.0);
-        assert_eq!(cell_center(90), 50.0);
-        assert_eq!(cell_center(180), 180.5 / 181.0 * 100.0);
+        assert_eq!(cell_center(0), 0.5 / 151.0 * 100.0);
+        assert_eq!(cell_center(75), 50.0);
+        assert_eq!(cell_center(150), 150.5 / 151.0 * 100.0);
     }
 
     #[test]

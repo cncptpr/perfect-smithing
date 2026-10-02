@@ -61,7 +61,7 @@ mod tests {
     fn plain_numbers_parse() {
         assert_eq!(parse_position("0"), Some(0));
         assert_eq!(parse_position("60"), Some(60));
-        assert_eq!(parse_position("180"), Some(180));
+        assert_eq!(parse_position("150"), Some(150));
         assert_eq!(parse_position(" 42 "), Some(42));
         // Out-of-range values parse too; the setters clamp them onto the bar.
         assert_eq!(parse_position("999"), Some(999));
@@ -81,9 +81,9 @@ mod tests {
     fn parsed_positions_end_up_on_the_markers() {
         let mut state = State::default();
 
-        state.set_target(parse_position("179").unwrap());
+        state.set_target(parse_position("149").unwrap());
         state.set_start(parse_position("999").unwrap());
 
-        assert_eq!((state.start, state.target), (180, 179));
+        assert_eq!((state.start, state.target), (150, 149));
     }
 }

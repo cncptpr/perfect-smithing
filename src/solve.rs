@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 use crate::{apsp::APSPResult, num::Num};
 
-pub const DEFAULT_MAX_POS: i64 = 180;
+pub const DEFAULT_MAX_POS: i64 = 150;
 pub const DEFAULT_STEPS: [i64; 8] = [-15, -6, -5, -3, 2, 7, 13, 16];
 
 /// Failures of the core logic, shared by CLI and web.

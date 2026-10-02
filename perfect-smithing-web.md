@@ -6,7 +6,7 @@ self-contained: every decision is already made. If anything here contradicts `WE
 
 Settled interpretations (from the author):
 
-- Bar bound: **180** (matches the CLI default `max_pos`), i.e. 181 unit cells `0..=180`.
+- Bar bound: **150** (matches the CLI default `max_pos`), i.e. 151 unit cells `0..=150`.
 - The bar is built from small rectangular boxes (cells), a bit taller than wide.
   "Every 10th larger, every 5th discolored" refers to these cells (0-based): cell `i % 5 == 0`
   slightly discolored, `i % 10 == 0` additionally a little taller, numbers above at every 20.
@@ -172,7 +172,7 @@ All cargo/clippy/fmt/wasm commands in every later phase run inside `devenv shell
 `solve.rs`:
 
 ```rust
-pub const DEFAULT_MAX_POS: i64 = 180;
+pub const DEFAULT_MAX_POS: i64 = 150;
 pub const DEFAULT_STEPS: [i64; 8] = [-15, -6, -5, -3, 2, 7, 13, 16];
 
 pub struct LastHits([Option<i64>; 3]);              // order [last, second, third]
@@ -197,7 +197,7 @@ Provably optimal for a fixed suffix.
 
 Cache: add `steps: Vec<i64>` to `APSPResult` (set by `floyd_warshall`). `load_cache(size,
 &steps)` returns `None` unless sizes **and** steps match; keep the check as a pure
-`validate()` fn (testable) with thin file IO. The existing `cache/result-181.json` lacks the
+`validate()` fn (testable) with thin file IO. The existing `cache/result-*.json` lacks the
 field → parse fails → recompute + overwrite (desired).
 
 CLI (`src/main.rs`):
@@ -243,7 +243,7 @@ CLI (`src/main.rs`):
   ```
 
 - `url.rs` — pure `to_query(&State) -> String` (omits defaults) and
-  `from_query(&str) -> State` (clamp markers to `0..=180`, drop slot values ∉
+  `from_query(&str) -> State` (clamp markers to `0..=150`, drop slot values ∉
   `DEFAULT_STEPS`, clamp `sel` to 0..=2). Format:
 
   `?start=0&target=60&last=16&second=13&third=7&sel=1`
@@ -267,12 +267,12 @@ wrap, colors cover all 8 values. `cargo clippy --all-targets -- -D warnings`.
 2. **Buttons** — 8 hit buttons in game order `[-15,-6,-5,-3,2,7,13,16]` in their hit
    colors + an **empty** button (clears the selected slot, selection stays). Clicking a hit
    button fills the selected slot and advances selection (wrapping).
-3. **Numbers** — `0, 20, …, 180`, positioned at the centers of cells 0,20,…,180
-   (`left = (v + 0.5) / 181 * 100%`, translateX(-50%)).
-4. **Bar** — 181 flex cells (bottom-aligned; base height, `i%10==0` taller, `i%5==0`
+3. **Numbers** — `0, 20, …, 140`, positioned at the centers of cells 0,20,…,140
+   (`left = (v + 0.5) / 151 * 100%`, translateX(-50%)).
+4. **Bar** — 151 flex cells (bottom-aligned; base height, `i%10==0` taller, `i%5==0`
    discolored). Markers absolutely positioned at cell centers: **red = target,
    green = player/start**, `pointer-events: none` (cells too) so events always target the
-   bar container and `offset_x` maps cleanly: `pos = clamp(floor(offset_x / width * 181), 0, 180)`.
+   bar container and `offset_x` maps cleanly: `pos = clamp(floor(offset_x / width * 151), 0, 150)`.
    `click` → target; `contextmenu` → preventDefault + start.
 5. **Arrows** — one SVG strip under the bar: each solution hit is a horizontal arrow from
    `p` to `p + step` in its hit color, head pointing left for negative steps. Sequential
